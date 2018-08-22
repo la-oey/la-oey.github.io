@@ -1,34 +1,46 @@
 var client = parseClient();
+var exptPart = "practice";
 var trialNumber = 0;
 var trialData = [];
-var Trial = 10;
-var rows = 4; //switch both to 8 later
-var cols = 4;
+var Trial = 5;
+var rows = 8;
+var cols = 8;
 var teachOrigSpaces = [];
 var learnOrigSpaces = [];
 var teachAvailable = [];
 var learnAvailable = [];
-var battleship = [];
-var turnColors = ['red','orange','yellow','green','blue','purple','magenta','hotpink'];
+var guessAvailable = [];
+var numRemaining = 0;
+var battleship = null;
+var turnColors = [{color:'red', r:'255', g:'0', b:'0'},
+                  {color:'orange', r:'255', g:'128', b:'0'},
+                  {color:'yellow', r:'255', g:'255', b:'0'},
+                  {color:'green', r:'0', g:'255', b:'0'},
+                  {color:'blue', r:'0', g:'0', b:'255'},
+                  {color:'purple', r:'255', g:'0', b:'255'}]
 var turn = 0;
 var highlighted = 0;
 var inited = false;
-var cellsDrawn = 0;
+var numCellsPainted = 0;
 var cellsCorr = 0;
+var cellsPainted = [];
+var guessedSpaces = [];
+var practiceGuess = true;
+var guessCheck = false;
 
 
-function create_table(rows, cols) { //rows * cols = number of exemplars
-  var table = "<table id='gameboard'>";
+function create_table(rows, cols, tabID, divID) { //rows * cols = number of exemplars
+  var table = "<table id='"+tabID+"'>";
   for(var i=0; i <rows; i++) {
     table += "<tr>";
     for(var j=0; j<cols; j++) {
         var ind = i * cols + j;
-        table += "<td class='cell' id='cell_" + ind + "'> </td>";
+        table += "<td class='cell " + tabID + "Cell' id='"+tabID+"Cell_" + ind + "'> </td>";
     }
     table += "</tr>"
   }
   table += "</table>";
-  $("#trialDiv").append(table);
+  $("#"+divID).append(table);
 }
 
 function buildTeacherTable(row, col){
@@ -55,29 +67,42 @@ function pageLoad(){
 
 function clickConsent(){
     document.getElementById('consent').style.display = 'none';
-    //document.getElementById('instructions').style.display = 'block';
-    document.getElementById('selectDiff').style.display = 'block';
+    document.getElementById('instructions').style.display = 'block';
+    //document.getElementById('selectDiff').style.display = 'block';
 }
 
-function clickDiff(){
-    document.getElementById('selectDiff').style.display = 'none';
-    document.getElementById('instructions').style.display = 'block';
-}
+// function clickDiff(){
+//     document.getElementById('selectDiff').style.display = 'none';
+//     document.getElementById('instructions').style.display = 'block';
+// }
 
 function clickInstructions(){
-    rows = $('input[name=boardDim]:checked').val();
-    cols = $('input[name=boardDim]:checked').val();
+    // rows = $('input[name=boardDim]:checked').val();
+    // cols = $('input[name=boardDim]:checked').val();
     document.getElementById('instructions').style.display = 'none';
     teachOrigSpaces = buildTeacherTable(rows, cols);
     learnOrigSpaces = buildLearnerTable(teachOrigSpaces);
 
-    console.log(learnOrigSpaces);
+    practiceLearner();
+}
+
+function clickPostpractice(){
+    document.getElementById('postpractice').style.display = 'none';
+    document.getElementById('assignment').style.display = 'block';
+}
+
+function clickAssignment(){
+    document.getElementById('assignment').style.display = 'none';
+    document.getElementById('next').setAttribute('onclick','trialPaint();');
+    exptPart = "experiment";
+    //assign learner table for learning trials
+    teachOrigSpaces = buildTeacherTable(rows, cols);
+    learnOrigSpaces = buildLearnerTable(teachOrigSpaces);
     trialStart();
 }
 
 function teachTurn(openSpaces,battleshipLoc){
     var halfSpaces = [];
-    
     var minR = lowerR = rows;
     var maxR = higherR = -1;
     var minC = lowerC = cols;
@@ -135,21 +160,21 @@ function teachTurn(openSpaces,battleshipLoc){
 function highlight(check){
     var halfSpaces = teachTurn(teachAvailable,battleship);
 
-
     if(halfSpaces.length==1){ //checks if there is only one potential byte to eliminate
         check=0;
     } else{ //unhighlight currently highlighted area
         for(var r=halfSpaces[Math.abs(check-1)].lowerR; r<=halfSpaces[Math.abs(check-1)].higherR; r++){
             for(var c=halfSpaces[Math.abs(check-1)].lowerC; c<=halfSpaces[Math.abs(check-1)].higherC; c++){
-                $('#cell_' + (r*cols+c)).css({'background-color':'white'});
+                $('#gameboardCell_' + (r*cols+c)).css({'background-color':'white',
+                                        'opacity':'1'});
             }
         }
     }
 
     for(var r=halfSpaces[check].lowerR; r<=halfSpaces[check].higherR; r++){
         for(var c=halfSpaces[check].lowerC; c<=halfSpaces[check].higherC; c++){
-            $('#cell_' + (r*cols+c)).css({'background-color':turnColors[turn],
-                                        'opacity': '0.3'});
+            $('#gameboardCell_' + (r*cols+c)).css({'background-color':turnColors[turn].color,
+                                        'opacity':'0.3'});
         }
     }
     document.getElementById('gameboard').setAttribute('onclick','clickBoard('+check+');');
@@ -165,17 +190,21 @@ function clickBoard(selected){
     } 
     for(var r=halfSpaces[selected].lowerR; r<=halfSpaces[selected].higherR; r++){
         for(var c=halfSpaces[selected].lowerC; c<=halfSpaces[selected].higherC; c++){
-            $('#cell_' + (r*cols+c)).css({'background-color':turnColors[turn],
+            $('#gameboardCell_' + (r*cols+c)).css({'background-color':turnColors[turn].color,
                                         'opacity':'1'});
             elimSpaces.push({r,c});
         }
     }
-
     //check for matches between values eliminated and values in the learner's & teacher's open hypothesis space
     for(var e=0; e<elimSpaces.length; e++){
         for(var l=0; l<learnAvailable.length; l++){
             if(elimSpaces[e].r==learnAvailable[l].r & elimSpaces[e].c==learnAvailable[l].c){
                 learnAvailable.splice(l,1);
+            }
+        }
+        for(var g=0; g<guessAvailable.length; g++){
+            if(elimSpaces[e].r==guessAvailable[g].r & elimSpaces[e].c==guessAvailable[g].c){
+                guessAvailable.splice(g,1);
             }
         }
         for(var t=0; t<teachAvailable.length; t++){
@@ -185,11 +214,28 @@ function clickBoard(selected){
         }
     }
 
+    //Computer's Guess
+    //samples uniformly from set of hypothesis spaces not yet eliminated and not yet guessed
+    var learnerGuess = sample(guessAvailable);
+    var guessedInd = learnerGuess.r * cols + learnerGuess.c;
+    if(guessedInd == (battleship.r * cols + battleship.c)){
+        $('#target').remove();
+        $('#gameboardCell_'+guessedInd).prepend('<img id="targetHit" src="img/targetHit.png" />');
+    } else{
+        $('#gameboardCell_'+guessedInd).prepend('<img id="arrow" src="img/arrow.png" />');
+    }
+    guessedSpaces.push(learnerGuess);
+    guessAvailable.splice(guessAvailable.indexOf(learnerGuess),1);
+
+    //Explicit Feedback
     document.getElementById('spacesOpen').innerHTML = learnAvailable.length;
     document.getElementById('spacesElim').innerHTML = learnOrigSpaces.length - learnAvailable.length;
+    var numElimRound = numRemaining - learnAvailable.length;
+    numRemaining = learnAvailable.length;
+    $('#feedbackTurn').append("<font color='" + turnColors[turn].color + "'>Turn " + (turn+1) + ": " + numElimRound + "</font><br><br>")
     ++turn;
 
-    if(learnAvailable.length==1){
+    if(learnAvailable.length==1 || guessedInd==(battleship.r * cols+battleship.c)){
         document.getElementById('gameboard').setAttribute('onclick','');
         document.getElementById('next').disabled=false;
         document.onkeydown = null;
@@ -197,38 +243,58 @@ function clickBoard(selected){
     inited = false;
 }
 
-function draw(index, marked){
+function paint(index, marked){
     if(!marked){
-        $('#cell_'+index).css({'background-color':'black'});
-        ++cellsDrawn;
-        document.getElementById('cell_'+index).setAttribute('cellSelected','true');
-        document.getElementById('cell_'+index).setAttribute('onclick','draw(' + index + ',true)');
-        document.getElementById('spacesDrawn').innerHTML = cellsDrawn;
+        $('#gameboardCell_'+index).css({'background-color':'white'});
+        ++numCellsPainted;
+        $('#gameboardCell_'+index).attr('cellSelected','true');
+        $('#gameboardCell_'+index).attr('onclick','paint(' + index + ',true)');
+        cellsPainted.push(teachOrigSpaces[index]);
+        document.getElementById('spacesPainted').innerHTML = numCellsPainted;
     } else{
-        $('#cell_'+index).css({'background-color':'white'});
-        --cellsDrawn;
-        document.getElementById('cell_'+index).setAttribute('cellSelected','false');
-        document.getElementById('cell_'+index).setAttribute('onclick','draw(' + index + ',false)');
-        document.getElementById('spacesDrawn').innerHTML = cellsDrawn;
+        $('#gameboardCell_'+index).css({'background-color':'gray'});
+        --numCellsPainted;
+        $('#gameboardCell_'+index).attr('cellSelected','false');
+        $('#gameboardCell_'+index).attr('onclick','paint(' + index + ',false)');
+        cellsPainted.splice(cellsPainted.indexOf(teachOrigSpaces[index]),1);
+        document.getElementById('spacesPainted').innerHTML = numCellsPainted;
     }
 
-    if(cellsDrawn == learnOrigSpaces.length){
+    if(numCellsPainted == learnOrigSpaces.length){
         document.getElementById('next').disabled=false;
     } else{
         document.getElementById('next').disabled=true;
-
     }
-
 }
 
 
 function trialStart(){
-    //add experiment here
-    create_table(rows, cols);
+    if(trialNumber > 0){
+        var source = document.getElementById('gameboard');
+        var destination = document.getElementById('completeBoard');
+        var copy = source.cloneNode(true);
+        copy.setAttribute('id', 'completeBoard');
+        destination.parentNode.replaceChild(copy, destination);
+        $('#completeBoard').show();
+        document.getElementById('gameboard').remove();
+    }
+
+    if(exptPart == "practice"){
+        document.getElementById('practice').style.display = 'none';
+        //outline of learner board?
+        //FIX
+    }
+
+    turn = 0;
+    guessedSpaces = [];
+    create_table(rows, cols, 'gameboard', 'trialDiv');
     document.getElementById('trial').style.display = 'block';
     document.getElementById('next').disabled=true;
-    document.getElementById('trialTxt').innerHTML = 'Trial ' + (trialNumber+1);
-    document.getElementById('feedback').innerHTML = "Spaces Open: <p2 id='spacesOpen'></p2><br>Spaces Eliminated: <p2 id='spacesElim'></p2><br><br>"
+    if(exptPart != "practice"){
+        document.getElementById('trialTxt').innerHTML = 'Trial ' + (trialNumber+1);
+    }
+    document.getElementById('feedbackTurn').innerHTML = 'Cells Eliminated by Turn:<br><br>';
+    document.getElementById('feedback').innerHTML = "<br>Spaces Open: <p2 id='spacesOpen'></p2><br>Spaces Eliminated: <p2 id='spacesElim'></p2><br><br>"
     document.getElementById('spacesOpen').innerHTML = learnOrigSpaces.length;
     document.getElementById('spacesElim').innerHTML = 0;
     document.getElementById('gameboard').setAttribute('onclick','');
@@ -236,15 +302,12 @@ function trialStart(){
 
     teachAvailable = teachOrigSpaces.slice(0);
     learnAvailable = learnOrigSpaces.slice(0); //clones array of learner's spaces
-    //temporarily draw in learner's available spaces
-    // for(var i=0; i<learnAvailable.length; i++){
-    //     ind = learnAvailable[i].r*cols+learnAvailable[i].c;
-    //     $('#cell_'+ind).css({'background-color':'Green'});
-    // }
-
+    guessAvailable = learnOrigSpaces.slice(0); //available guesses also clone of learner's space
+    numRemaining = learnAvailable.length;
 
     battleship = sample(learnAvailable); //set Battleship
-    document.getElementById('cell_' + teachAvailable.indexOf(battleship)).innerHTML = '&#127850;';
+    console.log(battleship);
+    $('#gameboardCell_' + teachAvailable.indexOf(battleship)).prepend('<img id="target" src="img/target.png" />');
 
     highlighted = 0;
     inited = false;
@@ -267,126 +330,211 @@ function trialStart(){
     };
 }
 
-function trialDraw(){
-    cellsDrawn = 0;
-    
+function trialPaint(){
+    //copy board
+    var source = document.getElementById('gameboard');
+    var destination = document.getElementById('completeBoard');
+    var copy = source.cloneNode(true);
+    copy.setAttribute('id', 'completeBoard');
+    destination.parentNode.replaceChild(copy, destination);
+    $('#completeBoard').show();
+
+    //have participants amend previously painted cells
+    //numCellsPainted = 0;
     document.getElementById('gameboard').remove();
-    create_table(rows, cols);
+    create_table(rows, cols, 'gameboard', 'trialDiv');
     for(var i=0; i<rows*cols; i++){
-        document.getElementById('cell_'+i).setAttribute('onclick','draw('+i+',false);');
-        document.getElementById('cell_'+i).setAttribute('cellSelected','false');
+        $('#gameboardCell_'+i).attr('onclick','paint('+i+',false);');
+        $('#gameboardCell_'+i).attr('cellSelected','false');
+        $('#gameboardCell_'+i).css({'background-color':'gray'})
     }
-    //document.getElementById('next').disabled=true; //uncomment this later
+
+    for(var j=0; j<cellsPainted.length; j++){
+        index = cellsPainted[j].r * cols + cellsPainted[j].c;
+        $('#gameboardCell_'+index).attr('onclick','paint('+index+',true);');
+        $('#gameboardCell_'+index).attr('cellSelected','true');
+        $('#gameboardCell_'+index).css({'background-color':'white'});
+    }
+
+    if(numCellsPainted < learnOrigSpaces.length){
+        document.getElementById('next').disabled = true;
+    }
     document.getElementById('next').setAttribute('onclick','trialFeedback();');
     document.getElementById('trialInstruct').innerHTML = 'Click on the cells with your mouse.<br><br>';
-    document.getElementById('feedback').innerHTML = "Spaces Drawn: <p2 id='spacesDrawn'></p2> / " + learnOrigSpaces.length + "<br><br><br>";
-    document.getElementById('spacesDrawn').innerHTML = cellsDrawn;
-    
-    //click and drag over cells to draw--buggy right now
-    // $(document).ready(function(){
-    //     var isDown = false;   // Tracks status of mouse button
-    //     var mark = false;
-    //     var countCells = 0;
-
-    //     $(document).mousedown(function() {
-    //         isDown = true;      // When mouse goes down, set isDown to true
-    //     })
-    //     .mouseup(function() {
-    //         isDown = false;    // When mouse goes up, set isDown to false
-    //     });
-
-    //     $(".cell").mouseover(function(){
-    //         if(isDown) {        // Only change css if mouse is down
-                
-    //             console.log($(this).attr('cellSelected'))
-    //             if($(this).attr('cellSelected')=='false'){
-    //                 $(this).css({'background-color':'black'});
-    //                 if($(this).attr('cellSelected')=='false'){
-    //                     ++countCells;
-    //                     cellsDrawn = cellsDrawn + countCells;
-    //                     document.getElementById('spacesDrawn').innerHTML = cellsDrawn;
-    //                 }
-    //                 $(this).attr('cellSelected','true');  
-    //             } else{
-    //                 $(this).css({'background-color':'white'});
-    //                 if($(this).attr('cellSelected')=='true'){
-    //                     --countCells;
-    //                 cellsDrawn = cellsDrawn + countCells;
-    //                 document.getElementById('spacesDrawn').innerHTML = cellsDrawn;
-    //                 }
-    //                 $(this).attr('cellSelected','false');
-    //             }
-    //         }
-    //     });
-    // });
-
-    
+    document.getElementById('feedback').innerHTML = "<br>Spaces Painted: <p2 id='spacesPainted'></p2> / " + learnOrigSpaces.length + "<br><br><br>";
+    document.getElementById('spacesPainted').innerHTML = numCellsPainted;
 }
 
 function trialFeedback(){
     cellsCorr = 0;
-    document.getElementById('next').setAttribute('onclick','trialDone();');
-    document.getElementById('feedback').innerHTML = "Spaces Correct: <p2 id='spacesCorr'></p2> / " + learnOrigSpaces.length + "<br><br><br>";
+    document.getElementById('feedbackTurn').innerHTML = '';
+    $('#completeBoard').hide();
+    $('#gameboard').hide();
+    document.getElementById('feedback').innerHTML = "<br>Spaces Correct: <p2 id='spacesCorr'></p2> / " + learnOrigSpaces.length + "<br><br><br>";
     for(var a=0; a<learnOrigSpaces.length; a++){
         index = learnOrigSpaces[a].r * cols + learnOrigSpaces[a].c;
-        if($('#cell_'+index).attr('cellSelected')=='true'){
+        if($('#gameboardCell_'+index).attr('cellSelected')=='true'){
             ++cellsCorr;
         }
     }
+
+    if(exptPart == 'practice'){
+        document.getElementById('next').setAttribute('onclick','practiceDone();');
+        cellsPainted = [];
+        numCellsPainted = 0;
+        $('#gameboard').remove();
+    } else{
+        document.getElementById('next').setAttribute('onclick','trialDone();');
+    }
+
     document.getElementById('spacesCorr').innerHTML = cellsCorr;
     document.getElementById('trialInstruct').innerHTML = '<br><br><br>';
-    document.getElementById('gameboard').remove();
-    
     
 }
 
 function trialDone(){
-    // for isolated product version
     document.getElementById('trial').style.display = 'none';
+
     // record what the subject said
     trialData.push({
+        exptPart: exptPart,
         trialNumber: trialNumber,
         response: 1}); //change later
     // increment the trialNumber
     ++trialNumber;
     // if we are done with all trials, then go to completed page
-    if(trialNumber >= Trial){  // products.length
-        //document.getElementById('completed').style.display = 'block';
-        // these lines write to server.
+    if(trialNumber >= Trial){
+        $('#finalCorr').html((cellsCorr/learnOrigSpaces.length*100).toFixed(2));
+
+        $('#gameboard').show();
+        var source = document.getElementById('gameboard');
+        var destination = document.getElementById('finalBoard');
+        var copy = source.cloneNode(true);
+        copy.setAttribute('id', 'finalBoard');
+        destination.parentNode.replaceChild(copy, destination);
+
+
+        create_table(rows, cols, 'key', 'finalKey');
+        for(var i=0; i<rows*cols; i++){
+            $('#keyCell_'+i).css({'background-color':'red'});
+        }
+        for(var j=0; j<learnOrigSpaces.length; j++){
+            ind = learnOrigSpaces[j].r*cols+learnOrigSpaces[j].c;
+            $('#keyCell_'+ind).css({'background-color':'white'});
+        }
+
+        // these lines write to server
         data = {client: client, trials: trialData};
         writeServer(data);
         document.getElementById('trial').style.display = 'none';
         document.getElementById('completed').style.display = 'block';
     }
     else {
-        //document.getElementById('gameboard').remove();
-        document.getElementById('next').setAttribute('onclick','trialDraw();');
-        turn = 0;
+        document.getElementById('next').setAttribute('onclick','trialPaint();');
         trialStart();
     }
 }
 
-// function attention_single(){
-//     // take next product, and put in the product description.
-// //  choosePic();
-// document.getElementById('trial').style.display = 'none';
-//     attention = Math.floor(Math.random() * products.length);
-// document.getElementById('attentionText').innerHTML = products[attention].name;
-// document.getElementById("AttPicture").src = products[attention].img;
-//     // reset the slider
-//     document.getElementById('AttSlider').value = 500;
 
-//     document.getElementById('trialAttention').style.display = 'block';
-// document.getElementById('done').disabled=true;
-//     order = order+1;
-// }
+function guess(index){
+    if(index == (battleship.r * cols + battleship.c)){
+        $('#arrow_'+index).remove();
+        $('#practiceLearnCell_'+index).prepend('<img src="img/targetHit.png"/>');
+        guessCheck = true;
+    }
+    $('#practiceLearnCell_'+index).css('opacity','1');
+    $('#practiceLearnCell_'+index).off('mouseenter');
+    $('#practiceLearnCell_'+index).off('mouseleave');
+    guessedSpaces.push(index);
+    $(".practiceLearnCell").css("pointer-events", "none");
+    practiceGuess = true;
+}
 
-// function Acheck_single(){
-//  trialData.push({
-//      attention:document.getElementById('AttSlider').value});
-//     document.getElementById('trialAttention').style.display = 'none';
-//     trialStart();
-// }
+function teacherHint(){
+    var elimSpaces = [];
+    var halfSpaces = teachTurn(teachAvailable,battleship);
+    var move = sample(halfSpaces); //replace for passive learner expt
+
+    for(var r=move.lowerR; r<=move.higherR; r++){
+        for(var c=move.lowerC; c<=move.higherC; c++){
+            for(var l=0; l<learnAvailable.length; l++){
+                if(learnAvailable[l].r==r && learnAvailable[l].c==c){
+                    index = r * cols + c;
+                    if(guessedSpaces.indexOf(index) == -1){
+                        $('#arrow_'+index).remove();
+                    }
+                    $('#practiceLearnCell_'+index).css('opacity','1');
+                    $('#practiceLearnCell_'+index).off('mouseenter');
+                    $('#practiceLearnCell_'+index).off('mouseleave');
+                }
+            }
+
+            $('#practiceLearnCell_' + (r*cols+c)).css('box-shadow','inset 0 0 0 1000px rgba('+turnColors[turn].r+','+turnColors[turn].g+','+turnColors[turn].b+',.5)');
+            elimSpaces.push({r,c});
+        }
+    }
+
+    for(var e=0; e<elimSpaces.length; e++){
+        for(var l=0; l<learnAvailable.length; l++){
+            if(elimSpaces[e].r==learnAvailable[l].r & elimSpaces[e].c==learnAvailable[l].c){
+                learnAvailable.splice(l,1);
+            }
+        }
+        for(var t=0; t<teachAvailable.length; t++){
+            if(elimSpaces[e].r==teachAvailable[t].r & elimSpaces[e].c==teachAvailable[t].c){
+                teachAvailable.splice(t,1);
+            }
+        }
+    }
+}
+
+function practiceLearner(){
+    document.getElementById('practice').style.display = 'block';
+    document.getElementById('nextPractice').disabled = true;
+    teachAvailable = teachOrigSpaces.slice(0);
+    learnAvailable = learnOrigSpaces.slice(0); 
+    battleship = sample(learnOrigSpaces);
+    create_table(rows, cols, 'practiceLearn', 'trialDiv_learner');
+    $('.practiceLearnCell').css({'background-color':'gray'});
+    for(var i=0; i<learnOrigSpaces.length; i++){
+        ind = learnOrigSpaces[i].r * cols + learnOrigSpaces[i].c;
+        $('#practiceLearnCell_'+ind).css({'background-color':'white', 'opacity':'0'});
+        $('#practiceLearnCell_'+ind).attr('onclick','guess('+ind+')');
+        $('#practiceLearnCell_'+ind).prepend('<img id="arrow_' + ind + '" src="img/arrow.png"/>');
+        $('#practiceLearnCell_'+ind).on({'mouseenter': function(){
+            $(this).css('opacity','0.5');
+        }, 'mouseleave': function(){
+            $(this).css('opacity','0');
+        }});
+    }
+
+    $(".practiceLearnCell").css("pointer-events", "none");
+    var practiceTurns = setInterval(function(){
+        if(guessCheck){
+            clearInterval(practiceTurns);
+            $(".practiceLearnCell").css("pointer-events", "none");
+            document.getElementById('nextPractice').disabled = false;
+        }
+        if(practiceGuess && !guessCheck){
+            teacherHint();
+            $(".practiceLearnCell").css("pointer-events", "auto");
+            turn++;
+            practiceGuess = false;
+        }
+    }, 1000)
+}
+
+function practiceDone(){
+    // for isolated product version
+    document.getElementById('trial').style.display = 'none';
+
+    // record what the subject said
+    trialData.push({
+        exptPart: exptPart,
+        trialNumber: trialNumber,
+        response: 1}); //change later
+    document.getElementById('postpractice').style.display = 'block';
+}
 
 function experimentDone(){
     window.location = 'http://www.evullab.org';
@@ -401,6 +549,7 @@ function sample_without_replacement(sampleSize, sample){
   }
   return return_sample;
 }
+
 
 
 
