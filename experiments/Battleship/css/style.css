@@ -180,9 +180,28 @@ img {
 }
 
 #feedback {
-  position: relative;
-  left: 350px;
+  margin-left: 25%;
+  margin-right: 25%;
   float: left;
+}
+
+.scoreboard {
+  margin-left: 25%;
+  margin-right: 25%;
+  padding: 20px;
+}
+
+.scoreCol {
+  width: 50%;
+  float: left;
+  font-size: 24px;
+  text-align: center;
+}
+
+.wait {
+  margin-left: 25%;
+  margin-right: 25%;
+  padding: 30px;
 }
 
 .column {
@@ -214,11 +233,9 @@ img {
   margin-right: auto;
 }
 
-
 #practiceLearn {
   margin: 0 auto;
 }
-
 
 #finalBoardCol {
   width: 50%;
@@ -254,6 +271,10 @@ img {
   font-family: "Arial Black";
 }
 
+#askFeedback {
+  margin-left: 20%;
+  margin-right: 20%;
+}
 
 
 
