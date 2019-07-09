@@ -5,7 +5,6 @@ function konamicode(){
 	var saved_keydown = function(e){
 		var keyCode = e.keyCode;
 		if(index == konamiSequence.length - 1 && keyCode == konamiSequence[index]){
-			console.log("website under construction. fun games coming soon.")
 			window.location.href = "https://la-oey.github.io/konami.html"
 		}
 		else if(keyCode == konamiSequence[index]){
