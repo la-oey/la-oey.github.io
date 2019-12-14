@@ -162,6 +162,14 @@ div {
     top: 50%;
 }
 
+#titleTxt {
+    font-size: 36px;
+}
+
+#authorTxt {
+    font-size: 30px;
+}
+
 .txt {
     text-align: left;
     padding: 25px 100px 25px 100px;

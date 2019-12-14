@@ -4,135 +4,116 @@ var text = [
     	id:"title", 
     	before:"", 
     	after:"root0", 
-    	toptext:"", 
-    	src:"", 
-    	bottomtext:""
+    	toptext:'<div id="titleTxt">In Search of the Base Case</div><br><br><div id="authorTxt">Lauren Oey</div>', 
+    	src:""
     },{
     	id:"root0", 
     	before:"title", 
     	after:"root1", 
     	toptext:"I awoke to the sound of construction outside. Echoing hammering. Muffled men’s voices. The best way to wake up.", 
-    	src:"", 
-    	bottomtext:""
+    	src:""
     },{
     	id:"root1", 
     	before:"root0", 
     	after:"root2", 
     	toptext:"I rolled over, orienting my body towards my bedroom’s one large, industrial window. I unscrunched one eye. The light leaked around the outer edges of the curtains. I focused my one eye on the curtain’s Escherian print: an elegant flying white dove nestling its neck against an awkward-er black crow whose head is twisted away from the rest of its body. On their own, the two birds are unspectacular, but the pattern repeats: the black crow’s beak fits perfectly in the empty space between a cloned white dove’s wings. A checkerboard symphony of hundreds of white doves and black crows designed to tuck flawlessly adjacent to one another like puzzle pieces. The morning light seemed to shine right through the white doves.<br><br>She was always the elegant white dove, and I was the awkward black crow. But we tucked into each other perfectly. ", 
-    	src:"", 
-    	bottomtext:""
+    	src:""
     },{
     	id:"root2", 
     	before:"root1", 
     	after:"root3", 
     	toptext:'“They’re not perfect for each other,” she said to me once. “Look, if they were perfect for each other, the black one wouldn’t need to sit so awkwardly.”<br><br>“But that’s how the black one needs to sit,” I pushed. “That’s the only way the white one can look like it’s flying elegantly.” ', 
-    	src:"", 
-    	bottomtext:""
+    	src:""
     },{
     	id:"root3", 
     	before:"root2", 
     	after:"root4", 
     	toptext:'She rejected my insistence that she was the white dove. Never was there more an epitome of my idealizing her, I knew that. But I wanted so badly for her to be the one.<br><br>“We’re not compatible <i>enough</i>,” she said last night. “I’m sorry, but you’ll find someone who is a better fit than me. Trust me.” <br><br>And she left, just like that.', 
-    	src:"", 
-    	bottomtext:""
+    	src:""
     },{
     	id:"root4", 
     	before:"root3", 
     	after:"root5", 
     	toptext:'I tire of the repetitiveness of the hunt for the “best” life partner. I tried to simulate what my next relationship would be like. Another assertive, intellectually stimulating girl from the suburbs. Another first date. Another addiction to the butterflies she gives me when she walks into the room. The feeling of anticipation as we stand so close for the first time that I can feel her soft breath, and I fall in love with the smile wrinkles where her eyes meet her cheekbones. Another Saturday chess match in the park. The butterflies will slowly disappear. She’ll send a text message ending in a hostile period, and I won’t understand why. And she’ll say, “we’re not compatible enough,” and she’ll leave.', 
-    	src:"", 
-    	bottomtext:""
+    	src:""
     },{
     	id:"root5", 
     	before:"root4", 
     	after:"root6", 
     	toptext:'I rolled on my back. When did this all become so repetitive? She was a public interest lawyer. And before her, she was an immigration lawyer. And a divorce lawyer before her. Come to think of it, I’ve only been with lawyers as far back as my memory can reach back.<br><br>“It’s because you like when they beat you in an argument,” said my cheeky inner voice.', 
-    	src:"", 
-    	bottomtext:""
+    	src:""
     },{
     	id:"root6", 
     	before:"root5", 
     	after:"root7", 
     	toptext:'Wait, that can’t be right. Didn’t I have someone back in high school? I couldn’t have been dating a lawyer back then, right? <br><br>I was troubled. I couldn’t remember how long ago was high school. It’s been too long. But, surely, I should be able to remember the first person I felt a connection to.', 
-    	src:"", 
-    	bottomtext:""
+    	src:""
     },{
     	id:"root7", 
     	before:"root6", 
     	after:"root8", 
     	toptext:'Fortunately, several decades ago, E.M. developed a solution for such fuzzy, distant memories problems. Previously, there was a capacity for memory. A capacity for computer memory storage. Human working memory used to be capped at 4 ± 1 bits of information. But then, E.M.’s company challenged the concept of a memory <i>capacity</i>, or maximum. E.M. proposed that the memory <i>capacity</i> could be made obsolete. ', 
-    	src:"", 
-    	bottomtext:""
+    	src:""
     },{
     	id:"root8", 
     	before:"root7", 
     	after:"root9", 
     	toptext:'This became E.M.’s rather unpronounceable <i>Memoryendlessness</i> project. Not only did E.M. develop a device that could automatically encode a limitless amount of your experienced memories, but E.M. also made it possible to probe all your memories, even those memories created before the device’s invention. How did E.M. defeat the memory <i>capacity</i>? E.M.’s company developed an algorithm that could essentially recursively expand the memory capacity. The memory storage can be dynamically resized and rehashed when some percentage of the storage is occupied.', 
-    	src:"", 
-    	bottomtext:""
+    	src:""
     },{
     	id:"root9", 
     	before:"root8", 
     	after:"root10", 
     	toptext:'Despite achieving what it promised, the device was highly controversial when it was first released. With the invention of this new device brought fears about a new kind of terrorism: memory hackers. As a necessary precaution to defend against memory hackers, Memoryendlessness takes advantage of blockchain cryptography and prime factorization. As a result, <i>technically</i>, you could probe all of your memories, but <i>retrieving</i> a memory (decryption) is far more difficult than <i>encoding</i> a memory (encryption). ', 
-    	src:"", 
-    	bottomtext:""
+    	src:""
     },{
     	id:"root10", 
     	before:"root9", 
     	after:"root11", 
     	toptext:'Seemingly everyone owns a Memoryendlessness. It was quite the fad at one point in time. Everyone uses the encoding function; nearly no one uses the retrieving function.', 
-    	src:"", 
-    	bottomtext:""
+    	src:""
     },{
     	id:"root11", 
     	before:"root10", 
     	after:"root12", 
     	toptext:'I have one friend who claimed to use the retrieval function at one point in her life. She is quite the spontaneous person. She was surfing Wikipedia when she came across <i>flashbulb memories</i>, vivid memories about how individuals learned about major news events. People often felt overly confident in the accuracy of such memories despite their memories decaying over time.', 
-    	src:"", 
-    	bottomtext:""
+    	src:""
     },{
     	id:"root12", 
     	before:"root11", 
     	after:"root13", 
     	toptext:'<div class="script scriptSpeaker">D.K.</div><div class="script scriptTxt">And, so I came to the conclusion that I <i>must</i> test this out! Especially now that it’s much easier with our modern technology to re-simulate the truth of our past. Why not probe my own memories about the Easter Earthquake? Such a chaotic moment in time—how can you misremember something that salient? That’s what I thought too.</div><br><div class="script scriptSpeaker">ME</div><div class="script scriptTxt">So, I’m guessing you used the retrieval function of your Memoryendlessness?</div><br><div class="script scriptSpeaker">D.K.</div><div class="script scriptTxt">Yes!</div><br><div class="script scriptSpeaker">ME</div><div class="script scriptTxt">How does it work?? I don’t think I’ve met anyone that’s tried to use the retrieval function. It’s just so damn complicated to figure out.</div>',
-    	src:"", 
-    	bottomtext:""
+    	src:""
     },{
     	id:"root13", 
     	before:"root12", 
     	after:"root14", 
     	toptext:'<div class="script scriptSpeaker">D.K.</div><div class="script scriptTxt">What you have to do is to stand in the middle between the mirrors, and then enter through one of the mirrors.</div><br><div class="script scriptSpeaker">ME</div><div class="script scriptTxt">How do you “enter” through the mirror?</div><br><div class="script scriptSpeaker">D.K.</div><div class="script scriptTxt">I can’t explain it—-you just can.</div>', 
-    	src:"", 
-    	bottomtext:""
+    	src:""
     },{
     	id:"root14", 
     	before:"root13", 
     	after:"root15", 
     	toptext:'I crept up to the loft. That’s where I had stashed away my Memoryendlessness many years ago, along with dozens of other fleeting fads that failed to play a significant role in my life. <br><br>It was still making a steady whisper of a ticking noise. It was still incrementally encoding my life story. <br><br>With soft steps, I slowly inched myself forward toward the machine. A thick layer of dust adhered to my lavender socks. My steps left foot-shaped patches on the ground in my wake. <br><br>I stood in the middle directly between the left and the right mirror. I faced the right, then the left. Lights around the edges of the mirrors suddenly activated. The two mirrors created an infinitely nested image.', 
-    	src:"", //bouncing_ball.pde
-    	bottomtext:""
+    	src:"" //bouncing_ball.pde
     },{
     	id:"root15", 
     	before:"root14", 
     	after:"root16", 
     	toptext:'<div class="script scriptSpeaker">ME</div><div class="script scriptTxt">It doesn’t matter if it’s the left or the right one—-? I heard a rumor that if you go in the wrong direction, you can create a time paradox, which could cause a chain reaction that would unravel the very fabric of the space-time continuu--?</div><br> <div class="script scriptSpeaker">D.K.</div><div class="script scriptTxt">Nah, that’s totally science fiction. Probably just propaganda to make the device seem more mythical.</div><br><div class="script scriptSpeaker">ME</div><div class="script scriptAction">(giving a look of utter skepticism)</div><div class="script scriptTxt">Well go on. What happened next?</div><br><div class="script scriptSpeaker">D.K.</div><div class="script scriptTxt">When you face one of the mirrors, your eyes should be able to trace the edges of the mirror, and the illusion makes it appear almost as though you are in a long, never-ending hallway. You’re supposed to view it at just a slight angle where you can see yourself in the mirror alternating between your face and the back of your head. And in the middle of the very top, there’s a plate with a long string of 0s and 1s on it. </div>', 
-    	src:"", 
-    	bottomtext:""
+    	src:""
     },{
     	id:"root16", 
     	before:"root15", 
     	after:"root17", 
     	toptext:'<div style="font-size:37px">I looked at the mirror.</div><div style="font-size:32.5px">I looked at the mirror in the mirror.</div><div style="font-size:28.5px">I looked at the mirror in the mirror in the mirror.</div><div style="font-size:25px">I looked at the mirror in the mirror in the mirror in the mirror.</div><div style="font-size:22px">I looked at the mirror in the mirror in the mirror in the mirror in the mirror.</div><div style="font-size:19.5px">I looked at the mirror in the mirror in the mirror in the mirror in the mirror in the mirror.</div><div style="font-size:17.5px">I looked at the mirror in the mirror in the mirror in the mirror in the mirror in the mirror in the mirror.</div><div style="font-size:16px">I looked at the mirror in the mirror in the mirror in the mirror in the mirror in the mirror in the mirror in the mirror.</div>', 
-    	src:"", 
-    	bottomtext:""
+    	src:""
     },{
     	id:"root17", 
     	before:"root16", 
     	after:"root18", 
     	toptext:'And in each of the mirrors in the mirrors in the mirrors, etc., stood me. Me and a string of 0s and 1s above my head.<br><br><span style="background-color: black; font-size:32px"><font color="white">100010010101</font></span><br><br>My eyes focused in on the string of 0s and 1s in the mirror. Then I focused in on the string in the mirror in the mirror.', 
-    	src:"", 
-    	bottomtext:""
+    	src:""
     },{
     	id:"root18", 
     	before:"root17", 
