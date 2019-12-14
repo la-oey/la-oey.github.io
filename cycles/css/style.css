@@ -197,17 +197,16 @@ table {
 td{
     text-align: left;
     vertical-align: top;
+    font-size: 18px;
 }
 
 .playSpeaker {
-    font-size: 18px;
     width: 10%;
     font-family: courier new;
     text-transform: uppercase;
 }
 
 .playTxt {
-    font-size: 18px;
     width: 0%;
 }
 
