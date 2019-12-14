@@ -1,0 +1,244 @@
+
+input[type=range] {
+    -webkit-appearance: none;
+    margin: 18px 0;
+    width: 70%;
+}
+
+input[type=range]::-webkit-slider-runnable-track {
+    width: 95%;
+    height: 8.4px;
+    cursor: pointer;
+    animate: 0.2s;
+    box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+    background: #0000CD;
+    border-radius: 1.3px;
+    border: 0.2px solid #010101;
+}
+
+input[type=range]::-ms-track {
+    width: 95%;
+    height: 8.4px;
+    cursor: pointer;
+    animate: 0.2s;
+    box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+    background: #0000CD;
+    border-radius: 1.3px;
+    border: 0.2px solid #010101;
+}
+
+input[type=range]::-webkit-slider-thumb {
+    box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+    border: 1px solid #000000;
+    height: 36px;
+    width: 16px;
+    border-radius: 3px;
+    background: #ffffff;
+    cursor: pointer;
+    -webkit-appearance: none;
+    margin-top: -14px;
+}
+
+input[type=range]::-ms-thumb {
+    box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+    border: 1px solid #000000;
+    height: 36px;
+    width: 16px;
+    border-radius: 3px;
+    background: #ffffff;
+    cursor: pointer;
+}
+
+.pic {
+    height: 200px;
+    width: auto;
+}
+
+p {
+    font-size: 17px;
+    font-family: verdana;
+    margin: 1em 10% 1em 10%;
+}
+
+ul {
+    font-size: 17px;
+    font-family: verdana;
+    margin: 0.5em 10% 0.5em 10%;
+}
+
+#subsetInstr {
+    padding: 2px;
+    display: block;
+    font-size: 18px;
+    font-weight: bold;
+    text-align: center;
+}
+
+#radioConsent {
+    font-size: 14px;
+}
+
+.mtitle {
+    padding: 2px;
+    display: block;
+    font-size: 24px;
+    font-weight: bold;
+    text-align: center;
+
+}
+
+body {
+    background-color: white;
+}
+
+div {
+    font-size: 24px;
+}
+
+.screen {
+    display: none;
+}
+
+
+.big-button {
+    background-color: #4CAF50; /* Green */
+    border: none;
+    color: white;
+    padding: 16px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    -webkit-transition-duration: 0.4s; /* Safari */
+    transition-duration: 0.1s;
+    cursor: pointer;
+}
+
+.big-button {
+    margin-left: 25%;
+    margin-right: 25%;
+    width: 50%;
+    padding: 7px 32px;
+    border: 2px solid #4CAF50;
+    background-color: white;
+    color: black;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 1.25em;
+    font-family: "Helvetica", sans-serif;
+
+}
+
+.big-button:hover {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.big-button:disabled {
+    background-color: #555555;
+    color: white;
+}
+
+
+
+#left-move {
+    float: left;
+    border-top: 60px solid transparent;
+    border-bottom: 60px solid transparent; 
+    border-right:60px solid deepskyblue;
+}
+
+#right-move {
+    float: right;
+    border-top: 60px solid transparent;
+    border-bottom: 60px solid transparent;
+    border-left: 60px solid deepskyblue;
+}
+
+.move { /*fix this*/
+    position: relative;
+    top: 50%;
+}
+
+.txt {
+    text-align: left;
+    padding: 25px 100px 25px 100px;
+}
+
+.script {
+    font-size: 18px;
+    font-family: courier;
+}
+
+.scriptSpeaker {
+    padding: 0px 250px 0px 250px;
+}
+
+.scriptAction {
+    padding: 0px 200px 0px 200px;
+}
+
+.scriptTxt {
+    padding: 0px 150px 0px 150px;
+}
+
+
+
+
+table {
+    margin-left: auto;
+    width: 90%;
+    /*border-collapse: collapse;*/
+    padding-left: 10px;
+}
+
+td{
+    text-align: left;
+    vertical-align: top;
+}
+
+.playSpeaker {
+    font-size: 18px;
+    width: 10%;
+    font-family: courier new;
+    text-transform: uppercase;
+}
+
+.playTxt {
+    font-size: 18px;
+    width: 0%;
+}
+
+#countdown {
+    font-size: 32px;
+    background-color: black;
+    color: white;
+    width: 25%;
+}
+
+
+.chooseDestiny {
+    opacity: 0.8;
+    width: 200px;
+    color: black;
+    font-size: 30px;
+    padding: 20px;
+    margin-left: 5%;
+    margin-right: 5%;
+}
+
+#accept {
+    background-color: green;
+}
+
+#reject {
+    background-color: red;
+}
+
+
+
+
+
+
