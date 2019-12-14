@@ -47,6 +47,9 @@ function next(currentInstruct) {
         } else{
             document.getElementById('right-move').setAttribute('onclick','next("togod0");');
         }
+    } else if(currentInstruct == "end0"){
+        w = window.open('files/map.pdf');
+        w.print();
     }
 
     // if(nextNum == Object.keys(instruct).length-1){
