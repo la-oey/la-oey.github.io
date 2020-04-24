@@ -1,0 +1,68 @@
+
+<!DOCTYPE html>
+<html>
+<html lang="en-US">
+<meta charset="UTF-8">
+<head>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script type="text/javascript" src='js/client.js'></script>
+    <script type="text/javascript" src='js/dataio.js'></script>
+    <script type="text/javascript" src='js/expt.js'></script>
+    <script type="text/javascript" src='js/stim.js'></script>
+
+</head>
+
+
+<body onload="pageLoad();">
+
+<div id="consent" class="screen">
+    <h1 class="mtitle">Please read the following consent form:</h1>
+   <center><p>
+    <object data="pdf/consent.pdf" type="application/pdf" width="700px" height="510px" internalinstanceid="8">
+    	<embed src="pdf/consent.pdf">
+        	Your browser does not support viewing pdfs. Please download the consent form and read it carefully: <a href="pdf/consent.pdf">Download PDF</a>.<p></p>
+    </object> 
+    </p>
+    <p id="radioConsent">
+    	<input type="radio" class="prescreening" name="consent" value="yes"> I agree to participate.<br>
+        <input type="radio" class="prescreening" name="consent" value="no"> I <b>DO NOT</b> agree to participate.
+    </p></center>
+
+    <button class="big-button" id="continueConsent" onclick="clickConsent();"> Click here to consent and agree to participate</button>
+</div>
+
+<div id="instructions" class="screen">
+    <p class="mtitle">
+        Instructions. Please read carefully.
+    </p>
+    <p>
+    	Read the prompt at the top of the screen. Then, click on the selection that you think is correct. After making your selection, click the button to continue.<br>
+    	There are a total of <b id="maxTrials"></b> trials.
+    </p>
+    <button class="big-button" id="continueLead" onclick="clickInstructions();">Click here to continue</button>
+</div>
+
+<div id="trial" class="screen">
+    <p class="mtitle" id="round">Round</p>
+    <p id="sentence">I want <b id="stimTxt"></b>. Which box would you search first to find it?</p><br>
+    <table id=selectChoices>
+    	<td class="cell" id="cellL" onclick="select(cellL)">
+    		<image class="box" src="img/box.png" width="300"/>
+    		<div class="overlaidTxt" id="txtL"></div>
+    	</td>
+    	<td class="cell" id="cellR" onclick="select(cellR)">
+    		<image class="box" src="img/box.png" width="300"/>
+    		<div class="overlaidTxt" id="txtR"></div>
+    	</td>
+    </table>
+    <br><br><br><br>
+    <button class="big-button" id="next" type="button" onclick="trialDone();">Next!</button>
+</div>
+
+<div id="completed" class="screen">
+    <p class="mtitle">Thank you for your participation!</p>
+    <button class="big-button" id="finished" onclick="experimentDone();">Finished!</button>
+</div>
+
+</body>
